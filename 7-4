@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void init(int *A,int n)//将树存到数组A中
+{
+    for( int i=0 ; i<n ; i++ )
+    {
+        int x;
+        scanf("%d",&x);
+        int cnt=1;
+        while( A[cnt]!=-1 )
+        {
+            //左子树方向
+            if( x<A[cnt] && A[cnt]!=-1 ) cnt=cnt*2;
+            //右子树方向
+            if( x>A[cnt] && A[cnt]!=-1 ) cnt=cnt*2+1;
+        }
+        A[cnt]=x;
+    }
+}
+
+int cmp(int *A,int *B) //比较两颗树是否相同
+{
+    for( int i=1 ; i<2000 ; i++ )
+    {
+        if( A[i]!=B[i] ) return 0;
+    }
+    return 1;
+}
+
+int main()
+{
+    int n,l;
+    while( 1 )
+    {
+        scanf("%d",&n);
+        if( n!=0 )
+        {
+            scanf("%d",&l);
+            int A[2000]; //树的最大深度是10
+            fill(A,A+2000,-1);
+            init(A,n); //将的树用数组表示
+            for( int i=0 ; i<l ; i++ )
+            {
+                int B[2000];
+                fill(B,B+2000,-1);
+                init(B,n);
+                if( cmp(A,B) ) printf("Yes\n");
+                else printf("No\n");
+            }
+        }
+        else break;
+    }
+    return 0;
+}
