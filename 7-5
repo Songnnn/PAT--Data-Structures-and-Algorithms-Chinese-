@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int imin(int *A,int left,int right) //返回左右孩子中更小的那个的下标，左右孩子肯定不全为空
+{
+    if( A[left]==10001 ) return right;
+    if( A[right]==10001 ) return left;
+    if( A[left]<A[right] ) return left;
+    else return right;
+}
+
+void exchange(int &a,int &b) 
+{
+    int c=a;
+    a=b;
+    b=c;
+}
+
+int main()
+{
+    int A[1000]; //树用数组表示
+    fill(A,A+1000,10001);
+
+    int n,m;
+    scanf("%d %d",&n,&m);
+    for( int i=1 ; i<n+1 ; i++ )
+    {
+        int x;
+        scanf("%d",&x);
+        //构造小顶堆
+        A[i]=x;
+        for( int j=i/2 ; j>=1 ; j-- ) //插入元素
+        {
+            if( A[j]>A[imin(A,j*2,j*2+1)] ) //跟左右孩子比较
+            {
+                exchange(A[j],A[imin(A,j*2,j*2+1)]);
+            }
+        }
+
+    }
+
+    for( int i=0 ; i<m ; i++ )
+    {
+        int x;
+        scanf("%d",&x);
+        printf("%d",A[x]);
+        while( x>0 )
+        {
+            x=x/2;
+            if( x>0 ) printf(" %d",A[x]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
