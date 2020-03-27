@@ -1,0 +1,83 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int tag[10]; //访问标记
+int A[10][10]; ////采用邻接矩阵来表示无向图
+
+void dfsTra(int i,int n)
+{
+    tag[i]=1;
+    printf("%d ",i);
+    for( int j=0 ; j<n ; j++ )
+    {
+        if( A[i][j]==1 && tag[j]==0 ) dfsTra(j,n);
+    }
+}
+
+void DFS(int n)
+{
+    for( int i=0 ; i<n ; i++ )
+    {
+        if( tag[i]==0 )
+        {
+            printf("{ ");
+            dfsTra(i,n);
+            printf("}\n");
+        }
+    }
+}
+
+queue<int> q;
+void bfsTra(int i,int n)
+{
+    tag[i]=1;
+    printf("%d ",i);
+    for( int j=0 ; j<n ; j++ )
+    {
+        if( A[i][j]==1 && tag[j]==0 )
+        {
+            tag[j]=1;
+            q.push(j);
+        }
+    }
+
+    while( !q.empty() )
+    {
+        int top=q.front();
+        q.pop();
+        bfsTra(top,n);
+    }
+}
+
+void BFS(int n)
+{
+    for( int i=0 ; i<n ; i++ )
+    {
+        if( tag[i]==0 )
+        {
+            printf("{ ");
+            bfsTra(i,n);
+            printf("}\n");
+        }
+    }
+}
+
+int main()
+{
+    int n,e;
+    scanf("%d %d",&n,&e);
+    for( int i=0 ; i<n ; i++ ) fill(A[i],A[i]+n,0);
+    fill(tag,tag+10,0);
+    for( int i=0 ; i<e ; i++ )
+    {
+        int a,b;
+        scanf("%d %d",&a,&b);
+        A[a][b]=1;
+        A[b][a]=1;
+    }
+
+    DFS(n);
+    fill(tag,tag+10,0);
+    BFS(n);
+    return 0;
+}
