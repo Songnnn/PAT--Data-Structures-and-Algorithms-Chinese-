@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int A[1010][1010];//用邻接矩阵来表示图
+int tag[1010];
+double cnt=1;
+
+//计算结点i的可联系人数
+stack<int> s;
+void func(int i,int n,int dis)
+{
+    if( dis>6 ) return ;
+    tag[i]=1;
+    int num=0; //某个距离的可联系人数
+    for( int j=1 ; j<=n ; j++ )
+    {
+        if( A[i][j]==1 && tag[j]==0 )
+        {
+            s.push(j);
+            cnt++;
+            num++;
+        }
+    }
+    while( num-- )
+    {
+        int top=s.top();
+        s.pop();
+        func(top,n,dis+1);
+    }
+
+}
+
+
+int main()
+{
+    int n,m;
+    scanf("%d %d",&n,&m);
+
+    for( int i=0 ; i<1010 ; i++ ) fill(A[i],A[i]+1010,0);
+    for( int i=0 ; i<m ; i++ )
+    {
+        int a,b;
+        scanf("%d %d",&a,&b);
+        A[a][b]=1;
+        A[b][a]=1;
+    }
+
+    for( int i=1 ; i<=n ; i++ )
+    {
+        fill(tag,tag+1010,0);
+        func(i,n,1);
+        printf("%d: %.2lf%%\n",i,cnt/n*100);
+        cnt=1;
+    }
+
+
+    return 0;
+}
