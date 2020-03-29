@@ -1,0 +1,88 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+/*
+动物即为顶点，相应的转换魔咒长度即为相邻的边的权值。
+如果这个无向图不连通，则输出0。
+计算每个顶点到其他顶点的最短路径，然后挑出最大值。
+从这n个顶点的最大值中挑出最小值，该顶点即为所求顶点。
+
+部分正确，错误测试点3,4：
+3.最大N的等边长环，解不唯一，输出最小编号
+4.最大N，最大M，随机完全图
+*/
+
+int A[101][101]; //用邻接矩阵来表示无向图
+int tag[101]; //访问标志
+
+int getMinI(int i,int n,int *minWay) //求此时离顶点i最近的顶点的编号
+{
+    int mi=1;
+    for( int j=1 ; j<=n ; j++ )
+    {
+        if( tag[j]==0 && minWay[j]<minWay[mi] ) mi=j;
+    }
+    return mi;
+}
+
+int getMax(int i,int n) //Djs算法求顶点i到其他顶点的最短路径
+{
+    tag[i]=1;
+    int minWay[n+1]; //存放顶点i到其他顶点的最短路径长度
+    for( int j=1 ; j<=n ; j++ ) minWay[j]=A[i][j];
+    for( int j=1 ; j<n ; j++ )
+    {
+        int imin=getMinI(i,n,minWay);
+        tag[imin]=1;
+        for( int k=1 ; k<=n ; k++ )
+        {
+            if( tag[k]==0 && A[i][imin]+A[imin][k]<A[i][k] )
+                minWay[k]=A[i][imin]+A[imin][k];
+        }
+    }
+    minWay[i]=0;
+    return *max_element(minWay+1,minWay+n+1);
+}
+
+int main()
+{
+    int n,m;
+    scanf("%d %d",&n,&m);
+
+    for( int i=0 ; i<101 ; i++ ) fill(A[i],A[i]+101,99999);
+    for( int i=0 ; i<m ; i++ )
+    {
+        int a,b,c;
+        scanf("%d %d %d",&a,&b,&c);
+        A[a][b]=c;
+        A[b][a]=c;
+    }
+
+    int Max[n+1];
+    for( int i=1 ; i<=n ; i++ ) //得到每个顶点去其他顶点的最短路径中的最大值
+    {
+        fill(tag,tag+101,0);
+        Max[i]=getMax(i,n);
+    }
+
+    //判断该无向图是否联通,非联通图肯定无解，而且Max数组都是99999
+    int flag=0;
+    for( int i=1 ; i<=n ; i++ )
+    {
+        if( Max[i]!=99999 ) flag=1;
+    }
+    if( flag==0 )
+    {
+        printf("0");
+        return 0;
+    }
+
+    int imax=1;
+    for( int i=2 ; i<=n ; i++ ) //输出最小值，若多个则输出编号最小的
+    {
+        if( Max[i]<Max[imax] ) imax=i;
+    }
+    printf("%d %d",imax,Max[imax]);
+
+    return 0;
+}
