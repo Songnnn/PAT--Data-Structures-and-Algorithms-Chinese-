@@ -1,0 +1,65 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef struct node
+{
+    int l; //距离
+    int m; //路费
+}Node;
+Node A[501][501];
+int tag[501]={0}; //访问标志
+
+int getMin(int s,int n,Node *M) //得到最近那个顶点的下标
+{
+    for( int i=0 ; i<n ; i++ )
+    {
+        if( tag[i]==0 && M[i].l<M[s].l ) s=i;
+    }
+    return s;
+}
+
+Node Djs(int s,int e,int n)
+{
+    tag[s]=1;
+    Node M[n];
+    for( int i=0 ; i<n ; i++ ) M[i]=A[s][i];
+    for( int i=0 ; i<n ; i++ )
+    {
+        int mini=getMin(s,n,M);
+        tag[mini]=1;
+        for( int j=0 ; j<n ; j++ )
+        {
+            if( tag[j]==0 && M[mini].l+A[mini][j].l<M[j].l )
+            {
+                M[j].l=M[mini].l+A[mini][j].l;
+                M[j].m=M[mini].m+A[mini][j].m;
+            }
+            else if( tag[j]==0 && M[mini].l+A[mini][j].l==M[j].l ) //距离相等要考虑路费
+            {
+                if( M[mini].m+A[mini][j].m<M[j].m ) M[j].m=M[mini].m+A[mini][j].m;
+            }
+        }
+    }
+    return M[e];
+}
+
+int main()
+{
+    int n,m,s,e;
+    scanf("%d%d%d%d",&n,&m,&s,&e);
+
+    Node x={9999,9999};
+    for( int i=0 ; i<n ; i++ ) fill(A[i],A[i]+n,x);
+    for( int i=0 ; i<m ; i++ )
+    {
+        int a,b,c,d;
+        scanf("%d%d%d%d",&a,&b,&c,&d);
+        A[a][b].l=A[b][a].l=c;
+        A[a][b].m=A[b][a].m=d;
+    }
+
+    x=Djs(s,e,n);
+    printf("%d %d",x.l,x.m);
+
+    return 0;
+}
