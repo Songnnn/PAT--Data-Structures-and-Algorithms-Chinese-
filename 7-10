@@ -1,15 +1,15 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-//思路正确，但是vector容器的使用或许有不当之处（尤其是删除某个特定元素时）导致部分测试点有段错误
 /*
 最小生成树问题
-采用Prim算法，还要判断是否为联通图
+采用Prim算法，先判断是否为联通图
 */
 
 #define noway -1
 
 int A[1001][1001]; //邻接矩阵表示无向图
+int tag[1001]={0}; //访问标志
 vector<int> in; //存放最小生成树中的顶点
 vector<int> out; //存放不在最小生成树中的顶点
 int sum=0;
@@ -17,9 +17,13 @@ int sum=0;
 void del(int x)
 {
     vector<int>::iterator i;
-    for( i=out.begin() ; i!=out.end() ; i++ )
+    //这里绝对不能将i++放到for循环中，否则会出现段错误
+    //erase函数删除完之后，迭代器会自动指向被删元素的后面，如果再i++则会出现野指针
+    //不删才能i++，删了之后不需再i++
+    for( i=out.begin() ; i!=out.end() ; ) 
     {
         if( *i==x ) out.erase(i);
+        else i++;
     }
 }
 
@@ -43,7 +47,7 @@ int func()
     if( flag==0 ) return 0;
     sum+=mini;
     in.push_back(out[m]);
-    if( out.size()!=1 ) del(out[m]);
+    del(out[m]);
     return 1;
 }
 
