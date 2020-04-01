@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+map<long long,int> m;
+int main()
+{
+    int n;
+    cin>>n;
+    for( int i=0 ; i<2*n ; i++ )
+    {
+        long long a;
+        cin>>a;
+        if( m.count(a)==0 ) m[a]=1;
+        else m[a]++;
+    }
+
+    map<long long,int>::iterator it;
+    int imax=0; //纪录最大通话次数
+    for( it=m.begin() ; it!=m.end() ; it++ ) //找到最大通话次数
+    {
+        if( it->second>imax ) imax=it->second;
+    }
+
+    int number=0; //狂人个数
+    for( it=m.begin() ; it!=m.end() ; it++ ) //得到狂人数量
+    {
+        if( it->second==imax ) number++;
+    }
+
+    for( it=m.begin() ; it!=m.end() ; it++ ) //map容器按键的值自动升序排序，输出第一个找到的狂人即可
+    {
+        if( it->second==imax )
+        {
+            cout<<it->first<<" "<<imax;
+            break;
+        }
+    }
+
+    if( number>1 ) cout<<" "<<number;
+
+    return 0;
+}
