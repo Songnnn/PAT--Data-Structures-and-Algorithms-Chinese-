@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void Out(queue<int> &A)
+{
+    cout<<" "<<A.front();
+    A.pop();
+}
+
+int main()
+{
+     int n;
+     cin>>n;
+
+     queue<int> A;
+     queue<int> B;
+
+     for( int i=0 ; i<n ; i++ )
+     {
+         int x;
+         cin>>x;
+         if( x%2==0 ) B.push(x);
+         else A.push(x);
+     }
+
+     int tag=0;
+     while( !A.empty() || !B.empty() ) //只要还有顾客
+     {
+         if( tag==0 ) //注意格式，末尾不能有多余空格
+         {
+             if( A.size()>1 )
+             {
+                 cout<<A.front();
+                 A.pop();
+                 Out(A);
+                 tag=1;
+             }
+             else if( A.size()==1 )
+             {
+                 cout<<A.front();
+                 A.pop();
+                 tag=1;
+             }
+         }
+         else
+         {
+             if( A.size()>1 )
+             {
+                 Out(A);
+                 Out(A);
+             }
+             else if( A.size()==1 ) Out(A);
+         }
+
+         if( tag==0 && B.size()>=1 )
+         {
+             cout<<B.front();
+             B.pop();
+             tag=1;
+         }
+         else if( B.size()>=1 ) Out(B) ;
+     }
+
+
+     return 0;
+}
