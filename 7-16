@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+ {
+     int a,b; //系数,指数
+     int tag=0;
+     //本题的输入没有具体的结束数量，边输入边输出比较方便
+     //主要是防止输入的多项式没有常数项
+     while( ~scanf("%d %d",&a,&b) ) 
+     {
+        if( b!=0 )
+        {
+           if( tag ) printf(" ");  
+           else tag=1;
+           printf("%d %d",a*b,b-1);
+        }
+        else break;
+     }
+     if( !tag ) printf("0 0");
+
+     return 0;
+}
