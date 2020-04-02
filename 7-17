@@ -1,0 +1,28 @@
+//递归解决汉诺塔问题
+#include<bits/stdc++.h>
+using namespace std;
+
+void Move(char a,char c)
+{
+    printf("%c -> %c\n",a,c);
+}
+
+void hanoi(int n,char a,char b,char c)
+{
+    if( n==1 ) Move(a,c);
+    else
+    {
+        hanoi(n-1,a,c,b);
+        Move(a,c);
+        hanoi(n-1,b,a,c);
+    }
+}
+
+int main()
+{
+     int n;
+     cin>>n;
+     hanoi(n,'a','b','c');
+
+     return 0;
+}
