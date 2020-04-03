@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+//记录下从倒数第k个数开始的k个数
+//无论数据有多少，倒数第k个数一定是队列中的第一个数
+//这两个测试点有时候能通过，大部分时候无法通过
+//第三个测试点：随机大数据，k=1
+//第四个测试点；随机大数据，k=总数据量
+
+int main()
+{
+     int k;
+     cin>>k;
+     queue<int> q; //循环队列，容量为k
+     int x,key,cnt=0;
+
+     do
+     {
+         cin>>x;
+         if( x>=0 )
+         {
+             cnt++;
+             if( q.size()==k ) q.pop(); //实现循环
+             q.push(x);
+             if( cnt-k+1>=1 ) key=q.front();
+         }
+     }while( x>0 );
+
+     if( cnt<k ) cout<<"NULL";
+     else cout<<key;
+
+     return 0;
+}
