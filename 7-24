@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+
+    int n;
+    cin>>n;
+    getchar();
+
+    map<string,double> m;
+    for( int i=0 ; i<n ; i++ )
+    {
+        string str;
+        getline(cin,str);
+        if( m.count(str)==0 ) m[str]=1;
+        else m[str]++;
+    }
+
+    //map按照键的升序自动排序，这里刚好是字典序升序，故直接输出即可
+    map<string,double>::iterator it;
+    for( it=m.begin() ; it!=m.end() ; it++ )
+    {
+        cout<<it->first<<" ";
+        printf("%.4lf%%\n",(it->second)/n*100);
+    }
+
+    return 0;
+}
